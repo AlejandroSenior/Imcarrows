@@ -1,0 +1,33 @@
+---
+const links = [
+  { label: 'Inventario', href: '#selection-search' },
+  { label: 'Como funciona', href: '#hero' },
+  { label: 'Servicios', href: '#technical-inspection' },
+  { label: 'Testimonios', href: '#faqs' }
+];
+---
+
+<header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-imc-black/80 backdrop-blur-xl">
+  <nav class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
+    <a href="#hero" class="font-display text-lg uppercase tracking-[0.2em] text-imc-silver">Imcarrows</a>
+
+    <ul class="hidden items-center gap-8 text-sm uppercase tracking-[0.08em] text-imc-silver md:flex">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} class="transition hover:text-imc-yellow">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a
+      href="#contacto"
+      class="rounded-md border border-imc-yellow bg-imc-yellow px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-imc-black transition hover:bg-imc-red hover:text-white"
+    >
+      Solicitar oferta
+    </a>
+  </nav>
+</header>
