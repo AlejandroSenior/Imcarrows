@@ -1,0 +1,97 @@
+---
+const iconPaths = {
+  search: [
+    'M10.5 17a6.5 6.5 0 1 1 4.2-11.47A6.5 6.5 0 0 1 10.5 17Z',
+    'M15.5 15.5 20 20',
+    'M10.5 8v5',
+    'M8 10.5h5'
+  ],
+  inspection: [
+    'M4 6.5h9',
+    'M4 11.5h6',
+    'M4 16.5h5',
+    'M15.5 17.5 20 13',
+    'M13 15l2.5 2.5',
+    'M3 4h12v16H3z'
+  ],
+  transport: [
+    'M3 7h10v7H3z',
+    'M13 9h3l3 3v2h-6',
+    'M7 18a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z',
+    'M17 18a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z'
+  ],
+  documents: [
+    'M7 3h7l4 4v14H7z',
+    'M14 3v4h4',
+    'M10 12h5',
+    'M10 16h5'
+  ]
+} as const;
+
+const steps: Array<{
+  number: string;
+  title: string;
+  description: string;
+  paths: readonly string[];
+}> = [
+  {
+    number: '1',
+    title: 'Busqueda',
+    description:
+      'Seleccionamos las mejores unidades en concesionarios oficiales certificados de toda Alemania.',
+    paths: iconPaths.search
+  },
+  {
+    number: '2',
+    title: 'Inspeccion',
+    description:
+      'Nuestros tecnicos realizan una revision presencial de 150 puntos para garantizar el estado real.',
+    paths: iconPaths.inspection
+  },
+  {
+    number: '3',
+    title: 'Transporte',
+    description:
+      'Transporte asegurado en camion cerrado directamente hasta tu domicilio o nuestras oficinas.',
+    paths: iconPaths.transport
+  },
+  {
+    number: '4',
+    title: 'Matriculacion',
+    description: 'Gestion integral de ITV, impuestos y placas definitivas. Tu solo preocupate de conducir.',
+    paths: iconPaths.documents
+  }
+];
+---
+
+<section id="first-steps" class="bg-[#0a0a0a] py-20 sm:py-24">
+  <div class="mx-auto w-full max-w-7xl px-6 lg:px-8">
+    <div class="max-w-3xl">
+      <h2 class="text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl">Pasos para importar tu coche</h2>
+      <p class="mt-4 max-w-2xl text-base leading-7 text-white/55 sm:text-lg">
+        Nuestra metodologia Digital Concierge elimina la friccion del proceso de importacion, gestionando cada detalle tecnico y logistico.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-4 lg:grid-cols-4">
+      {
+        steps.map((step) => (
+          <article class="relative overflow-hidden rounded-[1.6rem] border border-white/6 bg-[linear-gradient(180deg,#151515_0%,#111111_100%)] p-6 shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
+            <span class="pointer-events-none absolute right-4 top-3 text-[6rem] font-semibold leading-none tracking-[-0.08em] text-white/4 sm:text-[7rem]">
+              {step.number}
+            </span>
+
+            <div class="relative z-10 flex h-11 w-11 items-center justify-center rounded-xl bg-imc-yellow/10 text-imc-yellow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5" aria-hidden="true">
+                {step.paths.map((path: string) => <path d={path} stroke-linecap="round" stroke-linejoin="round"></path>)}
+              </svg>
+            </div>
+
+            <h3 class="relative z-10 mt-20 text-2xl font-semibold tracking-[-0.03em] text-white">{step.title}</h3>
+            <p class="relative z-10 mt-4 text-sm leading-7 text-white/48">{step.description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
