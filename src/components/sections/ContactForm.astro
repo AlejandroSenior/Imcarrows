@@ -1,3 +1,8 @@
+---
+const formId = 'contact-form';
+const statusId = 'contact-form-status';
+---
+
 <section id="contacto" class="mx-auto w-full max-w-6xl px-6 pb-20 lg:px-8">
   <div
     class="grid gap-10 rounded-3xl border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-8 lg:grid-cols-2"
@@ -17,7 +22,12 @@
       </ul>
     </article>
 
-    <form class="space-y-4" action="#" method="post">
+    <form id={formId} class="space-y-4" action="/api/contact" method="post">
+      <div class="hidden" aria-hidden="true">
+        <label for="company">Company</label>
+        <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
       <div>
         <label for="name" class="mb-2 block text-xs uppercase tracking-widest text-white/60"> Nombre </label>
         <input
@@ -25,6 +35,21 @@
           name="name"
           type="text"
           placeholder="John Doe"
+          required
+          autocomplete="name"
+          class="w-full rounded-md border border-white/20 bg-imc-black/40 px-3 py-2 text-sm text-white outline-none ring-imc-yellow transition focus:ring-2"
+        />
+      </div>
+
+      <div>
+        <label for="email" class="mb-2 block text-xs uppercase tracking-widest text-white/60"> Email </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="john@doe.com"
+          required
+          autocomplete="email"
           class="w-full rounded-md border border-white/20 bg-imc-black/40 px-3 py-2 text-sm text-white outline-none ring-imc-yellow transition focus:ring-2"
         />
       </div>
@@ -36,6 +61,7 @@
           name="carModel"
           type="text"
           placeholder="Porsche 911"
+          required
           class="w-full rounded-md border border-white/20 bg-imc-black/40 px-3 py-2 text-sm text-white outline-none ring-imc-yellow transition focus:ring-2"
         />
       </div>
@@ -47,12 +73,16 @@
           name="message"
           rows="4"
           placeholder="Cuéntanos presupuesto, versión y preferencias..."
+          required
           class="w-full rounded-md border border-white/20 bg-imc-black/40 px-3 py-2 text-sm text-white outline-none ring-imc-yellow transition focus:ring-2"
         ></textarea>
       </div>
 
+      <p id={statusId} class="min-h-6 text-sm text-white/70" aria-live="polite"></p>
+
       <button
         type="submit"
+        data-submit-button
         class="w-full rounded-md border border-imc-yellow bg-imc-yellow px-4 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-imc-black transition hover:border-imc-red hover:bg-imc-red hover:text-white"
       >
         Enviar solicitud
@@ -60,3 +90,49 @@
     </form>
   </div>
 </section>
+
+<script define:vars={{ formId, statusId }}>
+  const form = document.getElementById(formId);
+  const status = document.getElementById(statusId);
+
+  if (form instanceof HTMLFormElement && status instanceof HTMLElement) {
+    const submitButton = form.querySelector('[data-submit-button]');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      status.textContent = 'Enviando solicitud...';
+
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = true;
+      }
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: {
+            Accept: 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'No se pudo enviar la solicitud.');
+        }
+
+        form.reset();
+        status.textContent = 'Solicitud enviada. Te contactaremos pronto.';
+      } catch (error) {
+        status.textContent = error instanceof Error
+          ? error.message
+          : 'No se pudo enviar la solicitud.';
+      } finally {
+        if (submitButton instanceof HTMLButtonElement) {
+          submitButton.disabled = false;
+        }
+      }
+    });
+  }
+</script>
