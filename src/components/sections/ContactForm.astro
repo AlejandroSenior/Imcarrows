@@ -116,12 +116,12 @@ const statusId = 'contact-form-status';
           }
         });
 
-        console.log(response);
+        const contentType = response.headers.get('content-type') ?? '';
+        const text = await response.text();
+        const data = contentType.includes('application/json') && text ? JSON.parse(text) : null;
 
-        const data = await response.json();
-
-        if (!response.ok || !data.ok) {
-          throw new Error(data.error || 'No se pudo enviar la solicitud.');
+        if (!response.ok || !data?.ok) {
+          throw new Error(data?.error || `Error ${response.status} al enviar la solicitud.`);
         }
 
         form.reset();

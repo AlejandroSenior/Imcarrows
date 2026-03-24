@@ -1,20 +1,25 @@
 import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
 import { Resend } from 'resend';
 
-const resend = new Resend(import.meta.env.RESEND_API_KEY);
-
 export const POST: APIRoute = async ({ request }) => {
-  const formData = await request.formData();
-
-  const name = formData.get('name');
-  const email = formData.get('email');
-  const carModel = formData.get('carModel');
-  const message = formData.get('message');
-
   try {
+    const formData = await request.formData();
+
+    const name = String(formData.get('name') ?? '');
+    const email = String(formData.get('email') ?? '');
+    const carModel = String(formData.get('carModel') ?? '');
+    const message = String(formData.get('message') ?? '');
+
+    if (!name || !email || !carModel || !message) {
+      return Response.json({ ok: false, error: 'Faltan campos obligatorios.' }, { status: 400 });
+    }
+
+    const resend = new Resend(env.RESEND_API_KEY);
+
     await resend.emails.send({
-      from: import.meta.env.CONTACT_FROM_EMAIL,
-      to: import.meta.env.CONTACT_TO_EMAIL,
+      from: env.CONTACT_FROM_EMAIL,
+      to: env.CONTACT_TO_EMAIL,
       subject: 'Nuevo contacto desde IMC Arrows',
       html: `
         <p><strong>Nombre:</strong> ${name}</p>
