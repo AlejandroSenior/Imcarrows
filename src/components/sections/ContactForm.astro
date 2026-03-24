@@ -116,6 +116,8 @@ const statusId = 'contact-form-status';
           }
         });
 
+        console.log(response);
+
         const data = await response.json();
 
         if (!response.ok || !data.ok) {
@@ -125,9 +127,7 @@ const statusId = 'contact-form-status';
         form.reset();
         status.textContent = 'Solicitud enviada. Te contactaremos pronto.';
       } catch (error) {
-        status.textContent = error instanceof Error
-          ? error.message
-          : 'No se pudo enviar la solicitud.';
+        status.textContent = error instanceof Error ? error.message : 'No se pudo enviar la solicitud.';
       } finally {
         if (submitButton instanceof HTMLButtonElement) {
           submitButton.disabled = false;
