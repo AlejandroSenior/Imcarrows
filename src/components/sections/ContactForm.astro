@@ -1,110 +1,779 @@
 ---
 const formId = 'contact-form';
 const statusId = 'contact-form-status';
+const progressId = 'contact-form-progress';
+const counterId = 'contact-form-counter';
+const summaryFieldId = 'contact-form-summary';
+const successId = 'contact-form-success';
+
+const questions = [
+  {
+    key: 'name',
+    label: 'Nombre y apellidos',
+    prompt: 'Queremos dirigirnos a ti como corresponde.',
+    type: 'text',
+    placeholder: 'Nombre y apellidos',
+    autocomplete: 'name'
+  },
+  {
+    key: 'email',
+    label: 'Correo electrónico',
+    prompt: 'Nos pondremos en contacto contigo de forma personalizada.',
+    type: 'email',
+    placeholder: 'nombre@correo.com',
+    autocomplete: 'email',
+    pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$'
+  },
+  {
+    key: 'phone',
+    label: 'Número de teléfono',
+    prompt: 'Solo para coordinar contigo de forma directa.',
+    type: 'tel',
+    placeholder: '+34 600 000 000',
+    autocomplete: 'tel',
+    pattern: '^(?:\\+34|0034)?[6789]\\d{8}$'
+  },
+  {
+    key: 'carPurpose',
+    label: '¿El coche es para uso personal, para alquilar o revender?',
+    prompt: 'Nos ayuda a filtrar oportunidades reales desde el inicio.',
+    type: 'choice',
+    options: ['Uso personal', 'Revender', 'Alquilar', 'Usarlo un tiempo y luego revenderlo', 'Solo explorando opciones']
+  },
+  {
+    key: 'priceRange',
+    label: '¿Qué presupuesto tienes?',
+    prompt: 'Incluye el rango o cifra aproximada, para ajustar la búsqueda a tus posibilidades.',
+    type: 'choice',
+    options: [
+      'Menos de 10.000€',
+      'Entre 10.000€ y 20.000€',
+      'Entre 20.000€ y 30.000€',
+      'Entre 30.000€ y 40.000€',
+      'Entre 40.000€ y 50.000€',
+      'Entre 50.000€ y 60.000€',
+      'Más de 60.000€'
+    ]
+  },
+  {
+    key: 'deliveryTime',
+    label: '¿Cuándo quieres tener tu coche en casa?',
+    prompt: 'Si tienes flexibilidad, indícanos tu plazo ideal para que podamos priorizar opciones que se ajusten a él.',
+    type: 'choice',
+    options: ['Lo antes posible', 'En 1-2 meses', 'En 3-4 meses', 'Más de 4 meses vista']
+  },
+  {
+    key: 'carModel',
+    label: 'Marca y modelo',
+    prompt:
+      '⚠️ Nuestro servicio no consiste en enviar catálogos, sino en encontrar y negociar la mejor unidad para ti dentro de lo que realmente buscas. Cuanto más específico seas, mejor podremos ayudarte.',
+    type: 'text',
+    placeholder: 'BMW M3 Touring',
+    autocomplete: 'off'
+  },
+  {
+    key: 'deliveryLocation',
+    label: '¿Dónde vas a recibir el coche?',
+    prompt: 'Nos ayuda a planificar la logística, matriculación y posibles costes asociados.',
+    type: 'choice',
+    options: ['Península o Islas Baleares', 'IslasCanarias', 'Fuera de España']
+  },
+  {
+    key: 'understandProcess',
+    label: 'Para ayudarte a encontrar tu coche ideal, necesitamos que confirmes esto.',
+    prompt:
+      'Ten en cuenta que en tu caso podremos ayudarte con todo el proceso hasta que el coche llegue a tu ciudad, pero la parte de matriculación deberás gestionarla tú con tus propios contactos. ¿Quieres continuar?',
+    type: 'choice',
+    options: ['Sí, quiero seguir', 'No']
+  },
+  {
+    key: 'extraDetails',
+    label: '¿Hay algo que te frena ahora mismo para comenzar la importación?',
+    prompt: 'Cuéntanos cualquier duda, miedo o inconveniente que tengas en mente. Queremos ayudarte a resolverlo.',
+    type: 'text',
+    placeholder: 'Cuéntanos',
+    autocomplete: 'off'
+  }
+];
 ---
 
-<section id="contacto" class="mx-auto w-full max-w-6xl px-6 pb-20 lg:px-8">
+<section id="contacto" data-contact-modal aria-hidden="true" class="contact-modal fixed inset-0 z-80 overflow-hidden">
+  <div class="contact-modal__backdrop absolute inset-0 bg-black/72 backdrop-blur-md" data-close-contact-form></div>
+
   <div
-    class="grid gap-10 rounded-3xl border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-8 lg:grid-cols-2"
+    class="contact-modal__surface relative flex h-screen flex-col overflow-hidden bg-[linear-gradient(180deg,#020202_0%,#0f0b02_48%,#d9b565_150%)]"
   >
-    <article>
-      <h2 class="font-display text-4xl leading-none text-imc-silver">
-        Start Your <span class="text-imc-yellow">Journey Today.</span>
-      </h2>
-      <p class="mt-4 max-w-md text-sm text-white/70">
-        Habla con nuestro equipo de importacion para una propuesta totalmente personalizada segun tu estilo de conduccion y presupuesto.
-      </p>
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(217,181,101,0.18),transparent_38%),radial-gradient(circle_at_bottom,rgba(255,255,255,0.08),transparent_34%)]"
+    >
+    </div>
 
-      <ul class="mt-6 space-y-2 text-sm text-white/80">
-        <li>+34 900 123 456</li>
-        <li>concierge@imcarrows.com</li>
-        <li>Marbella • Madrid • Barcelona</li>
-      </ul>
-    </article>
+    <!-- Progress bar at the very top -->
+    <div class="relative z-10 h-0.5 w-full bg-white/10">
+      <div id={progressId} class="h-full bg-imc-yellow transition-[width] duration-500 ease-out" style="width:10%"></div>
+    </div>
 
-    <form id={formId} class="space-y-4" action="/api/contact" method="post">
-      <div class="hidden" aria-hidden="true">
-        <label for="company">Company</label>
-        <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+    <!-- Brand + close row -->
+    <div class="relative z-10 flex items-center justify-center px-6 pt-6 lg:px-10">
+      <!-- hidden counter kept for JS progress tracking -->
+      <span id={counterId} class="sr-only" aria-live="polite">1 / {questions.length}</span>
+      <div class="flex items-center gap-3">
+        <img src="/imc-logo.webp" alt="Imcarrows" class="h-9 w-9" />
+        <span class="font-display text-xl uppercase tracking-[0.2em] text-imc-silver">Imcarrows</span>
       </div>
-
-      <div>
-        <label for="name" class="mb-2 block text-xs uppercase tracking-widest text-white/60"> Nombre </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          placeholder="John Doe"
-          required
-          autocomplete="name"
-          class="w-full rounded-md border border-white/20 bg-imc-black/40 px-3 py-2 text-sm text-white outline-none ring-imc-yellow transition focus:ring-2"
-        />
-      </div>
-
-      <div>
-        <label for="email" class="mb-2 block text-xs uppercase tracking-widest text-white/60"> Email </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="john@doe.com"
-          required
-          autocomplete="email"
-          class="w-full rounded-md border border-white/20 bg-imc-black/40 px-3 py-2 text-sm text-white outline-none ring-imc-yellow transition focus:ring-2"
-        />
-      </div>
-
-      <div>
-        <label for="car-model" class="mb-2 block text-xs uppercase tracking-widest text-white/60"> Modelo deseado </label>
-        <input
-          id="car-model"
-          name="carModel"
-          type="text"
-          placeholder="Porsche 911"
-          required
-          class="w-full rounded-md border border-white/20 bg-imc-black/40 px-3 py-2 text-sm text-white outline-none ring-imc-yellow transition focus:ring-2"
-        />
-      </div>
-
-      <div>
-        <label for="message" class="mb-2 block text-xs uppercase tracking-widest text-white/60"> Mensaje </label>
-        <textarea
-          id="message"
-          name="message"
-          rows="4"
-          placeholder="Cuéntanos presupuesto, versión y preferencias..."
-          required
-          class="w-full rounded-md border border-white/20 bg-imc-black/40 px-3 py-2 text-sm text-white outline-none ring-imc-yellow transition focus:ring-2"
-        ></textarea>
-      </div>
-
-      <p id={statusId} class="min-h-6 text-sm text-white/70" aria-live="polite"></p>
-
       <button
-        type="submit"
-        data-submit-button
-        class="w-full rounded-md border border-imc-yellow bg-imc-yellow px-4 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-imc-black transition hover:border-imc-red hover:bg-imc-red hover:text-white"
+        type="button"
+        data-close-contact-form
+        class="absolute right-5 top-5 inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/14 bg-black/35 text-white transition hover:border-imc-yellow hover:text-imc-yellow lg:right-10"
+        aria-label="Cerrar formulario"
       >
-        Enviar solicitud
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-3.5 w-3.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
       </button>
-    </form>
+    </div>
+
+    <div class="flex-1 overflow-y-auto">
+      <div class="flex min-h-full items-center justify-center px-6 py-12 lg:px-10">
+        <form id={formId} class="w-full max-w-2xl" action="/api/contact" method="post" novalidate>
+          <div class="hidden" aria-hidden="true">
+            <label for="company">Company</label>
+            <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+          <input id={summaryFieldId} name="message" type="hidden" value="" />
+
+          <div class="w-full">
+            {
+              questions.map((question, index) => (
+                <article
+                  class={`tf-step relative ${index === 0 ? 'is-active' : ''}`}
+                  data-step
+                  data-step-index={index}
+                  aria-hidden={index === 0 ? 'false' : 'true'}
+                >
+                  <div class="mx-auto flex w-full max-w-2xl flex-col items-center text-center">
+                    <div class="flex items-center justify-center gap-6 mb-5">
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          data-prev-button
+                          data-step-index={index}
+                          class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6 text-white transition hover:border-white hover:bg-white/12 hover:text-imc-yellow"
+                          aria-label="Pregunta anterior"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                      )}
+                      <span class="text-sm font-semibold tracking-[0.18em] text-imc-yellow">
+                        {index + 1}
+                        <span class="mx-1.5 font-normal text-white/30">/</span>
+                        {questions.length}
+                      </span>
+                      {index < questions.length - 1 && (
+                        <button
+                          type="button"
+                          data-next-button
+                          data-step-index={index}
+                          disabled
+                          class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6 text-white transition hover:border-white hover:bg-white/12 hover:text-imc-yellow disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-white/35 disabled:hover:border-white/10 disabled:hover:bg-white/5 disabled:hover:text-white/35"
+                          aria-label="Pregunta siguiente"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    <h3 class="mt-4 text-balance text-xl font-semibold leading-tight text-white sm:text-2xl">{question.label}</h3>
+                    <p class="mt-4 text-balance max-w-xl text-sm leading-7 text-white/68 sm:text-base">{question.prompt}</p>
+
+                    {question.type === 'choice' ? (
+                      <div class="mt-10 grid w-full gap-3 sm:grid-cols-2">
+                        <input type="hidden" name={question.key} data-answer-field required />
+                        {question.options?.map((option) => (
+                          <button
+                            type="button"
+                            class="tf-choice rounded-2xl border border-white/14 bg-white/6 px-5 py-3 text-left text-sm font-medium text-white transition duration-300 hover:border-imc-yellow/60 hover:bg-imc-yellow/10 hover:text-imc-yellow"
+                            data-choice-button
+                            data-choice-name={question.key}
+                            data-choice-value={option}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    ) : question.type === 'textarea' ? (
+                      <div class="mt-10 w-full">
+                        <textarea
+                          name={question.key}
+                          rows="5"
+                          required
+                          data-answer-field
+                          placeholder={question.placeholder}
+                          class="w-full rounded-[1.6rem] border border-white/14 bg-black/25 px-6 py-5 text-base leading-7 text-white outline-none transition duration-300 placeholder:text-white/28 focus:border-imc-yellow focus:bg-black/35"
+                        />
+                        <div class="mt-5 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                          <button
+                            type="submit"
+                            data-submit-button
+                            class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
+                          >
+                            Enviar formulario
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div class="mt-10 w-full">
+                        <input
+                          name={question.key}
+                          type={question.type === 'email' ? 'email' : question.type === 'tel' ? 'tel' : 'text'}
+                          required
+                          data-answer-field
+                          autocomplete={question.autocomplete}
+                          placeholder={question.placeholder}
+                          pattern={question.pattern}
+                          class="w-full border-b border-white/18 bg-transparent px-0 pb-5 text-center text-xl text-white outline-none transition duration-300 placeholder:text-white/25 focus:border-imc-yellow sm:text-2xl"
+                        />
+
+                        {index === questions.length - 1 ? (
+                          <div class="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                            <button
+                              type="submit"
+                              data-submit-button
+                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
+                            >
+                              Enviar formulario
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            data-continue-button
+                            class="mt-8 rounded-full border border-white/16 px-7 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-white transition hover:border-imc-yellow hover:bg-imc-yellow hover:text-imc-black"
+                          >
+                            Continuar
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </article>
+              ))
+            }
+
+            <article id={successId} class="tf-step" aria-hidden="true">
+              <div class="mx-auto flex w-full max-w-2xl flex-col items-center text-center">
+                <span
+                  class="rounded-full border border-imc-yellow/30 bg-imc-yellow/10 px-4 py-1 text-xs uppercase tracking-[0.3em] text-imc-yellow/80"
+                >
+                  ¡Formulario recibido!
+                </span>
+                <h3 class="mt-7 text-balance text-xl font-semibold leading-tight text-white sm:text-2xl">
+                  Nuestro equipo revisará tu solicitud en detalle y, si cumples con los requisitos, te contactaremos personalmente por Whatsapp
+                  en las próximas horas.
+                </h3>
+                <p class="mt-5 max-w-xl text-balance text-sm leading-5 text-white/68 sm:text-base">
+                  👉 Ten en cuenta: recibimos muchas solicitudes cada semana y solo trabajamos con un número limitado de clientes. Asegúrate de
+                  estar atento a tu móvil.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <p id={statusId} class="mt-6 text-center text-sm text-white/70" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
   </div>
 </section>
 
-<script define:vars={{ formId, statusId }}>
+<style>
+  :global(body.contact-form-open) {
+    overflow: hidden;
+  }
+
+  .contact-modal {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .contact-modal__backdrop {
+    opacity: 0;
+    transition: opacity 260ms ease;
+  }
+
+  .contact-modal__surface {
+    transform: translate3d(0, 100%, 0);
+    transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .contact-modal.is-open {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .contact-modal.is-open .contact-modal__backdrop {
+    opacity: 1;
+  }
+
+  .contact-modal.is-open .contact-modal__surface {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .tf-step {
+    display: none;
+    width: 100%;
+    padding-top: 2.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .tf-step.is-active {
+    display: block;
+    animation: tf-slide-up 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .tf-step.is-exit {
+    display: none;
+  }
+
+  .tf-choice.is-selected {
+    border-color: rgb(217 181 101 / 0.9);
+    background: rgb(217 181 101 / 0.12);
+    color: #d9b565;
+  }
+
+  @keyframes tf-slide-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 48px, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-modal__backdrop,
+    .contact-modal__surface {
+      transition: none;
+    }
+
+    .tf-step.is-active {
+      animation: none;
+    }
+  }
+</style>
+
+<script define:vars={{ formId, statusId, progressId, counterId, summaryFieldId, successId, totalQuestions: questions.length }}>
+  const modal = document.querySelector('[data-contact-modal]');
   const form = document.getElementById(formId);
   const status = document.getElementById(statusId);
+  const progressBar = document.getElementById(progressId);
+  const counter = document.getElementById(counterId);
+  const summaryField = document.getElementById(summaryFieldId);
+  const successPanel = document.getElementById(successId);
+  const openButtons = Array.from(document.querySelectorAll('[data-open-contact-form]'));
+  const closeButtons = Array.from(document.querySelectorAll('[data-close-contact-form]'));
 
-  if (form instanceof HTMLFormElement && status instanceof HTMLElement) {
+  if (
+    modal instanceof HTMLElement &&
+    form instanceof HTMLFormElement &&
+    status instanceof HTMLElement &&
+    progressBar instanceof HTMLElement &&
+    counter instanceof HTMLElement &&
+    summaryField instanceof HTMLInputElement &&
+    successPanel instanceof HTMLElement
+  ) {
+    const steps = Array.from(form.querySelectorAll('[data-step]'));
+    const continueButtons = Array.from(form.querySelectorAll('[data-continue-button]'));
+    const choiceButtons = Array.from(form.querySelectorAll('[data-choice-button]'));
+    const prevButtons = Array.from(form.querySelectorAll('[data-prev-button]'));
+    const nextButtons = Array.from(form.querySelectorAll('[data-next-button]'));
     const submitButton = form.querySelector('[data-submit-button]');
+    const defaultSubmitLabel = submitButton instanceof HTMLButtonElement ? submitButton.textContent : null;
+    const choiceFields = Array.from(form.querySelectorAll('input[type="hidden"][data-answer-field]'));
+    const answerFields = Array.from(form.querySelectorAll('[data-answer-field]'));
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const spanishPhoneRegex = /^[6789]\d{8}$/;
+    let currentStep = 0;
+    let lastFocusedElement = null;
+
+    const updateProgress = (stepIndex) => {
+      const safeIndex = Math.min(stepIndex, totalQuestions - 1);
+      const percentage = ((safeIndex + 1) / totalQuestions) * 100;
+      progressBar.style.width = `${percentage}%`;
+      counter.textContent = `${Math.min(safeIndex + 1, totalQuestions)} / ${totalQuestions}`;
+    };
+
+    const focusActiveField = (panel) => {
+      const firstField = panel.querySelector('[data-answer-field]');
+
+      if (firstField instanceof HTMLInputElement || firstField instanceof HTMLTextAreaElement) {
+        firstField.focus();
+      }
+    };
+
+    const openModal = () => {
+      lastFocusedElement = document.activeElement;
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('contact-form-open');
+      window.setTimeout(() => {
+        focusActiveField(steps[currentStep]);
+      }, 180);
+    };
+
+    const closeModal = () => {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('contact-form-open');
+
+      if (lastFocusedElement instanceof HTMLElement) {
+        lastFocusedElement.focus();
+      }
+    };
+
+    const resetFlow = () => {
+      currentStep = 0;
+      status.textContent = '';
+      form.reset();
+      summaryField.value = '';
+      successPanel.classList.remove('is-active', 'is-exit');
+      successPanel.setAttribute('aria-hidden', 'true');
+
+      choiceButtons.forEach((button) => {
+        button.classList.remove('is-selected');
+      });
+
+      choiceFields.forEach((field) => {
+        if (field instanceof HTMLInputElement) {
+          field.value = '';
+        }
+      });
+
+      steps.forEach((panel, index) => {
+        panel.classList.remove('is-active', 'is-exit');
+        panel.setAttribute('aria-hidden', index === 0 ? 'false' : 'true');
+
+        if (index === 0) {
+          panel.classList.add('is-active');
+        }
+      });
+
+      updateProgress(0);
+      updateStepNavigationState(0);
+    };
+
+    const setActiveStep = (nextStep) => {
+      if (nextStep < 0 || nextStep >= steps.length || nextStep === currentStep) {
+        return;
+      }
+
+      steps.forEach((panel, index) => {
+        panel.classList.remove('is-active', 'is-exit');
+        panel.setAttribute('aria-hidden', index === nextStep ? 'false' : 'true');
+
+        if (index === nextStep) {
+          panel.classList.add('is-active');
+        }
+
+        if (index === currentStep) {
+          panel.classList.add('is-exit');
+        }
+      });
+
+      currentStep = nextStep;
+      updateProgress(currentStep);
+      focusActiveField(steps[currentStep]);
+      updateStepNavigationState(currentStep);
+      status.textContent = '';
+    };
+
+    const getFieldForStep = (stepIndex) => {
+      const panel = steps[stepIndex];
+
+      if (!(panel instanceof HTMLElement)) {
+        return null;
+      }
+
+      const field = panel.querySelector('[data-answer-field]');
+      return field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement ? field : null;
+    };
+
+    const normalizePhone = (value) => value.replace(/[\s()-]/g, '');
+
+    const sanitizePhoneInput = (value) => {
+      const withoutInvalidChars = value.replace(/[^\d+]/g, '');
+      return withoutInvalidChars.replace(/(?!^)\+/g, '');
+    };
+
+    const validateField = (field) => {
+      const rawValue = field.value;
+      const value = rawValue.trim();
+
+      field.setCustomValidity('');
+
+      if (!value) {
+        return { isValid: false, reason: 'empty' };
+      }
+
+      if (field.name === 'email' && !emailRegex.test(value)) {
+        field.setCustomValidity('Introduce un correo válido. Ejemplo: nombre@dominio.com');
+        return { isValid: false, reason: 'invalid-email' };
+      }
+
+      if (field.name === 'phone') {
+        const sanitized = sanitizePhoneInput(value);
+        const normalized = normalizePhone(sanitized);
+        const withoutPrefix = normalized.replace(/^(?:\+34|0034)/, '');
+
+        if (!/^\+?\d+$/.test(normalized)) {
+          field.setCustomValidity('El télefono solo puede contener números.');
+          return { isValid: false, reason: 'invalid-phone' };
+        }
+
+        if (!spanishPhoneRegex.test(withoutPrefix)) {
+          field.setCustomValidity('Introduce un télefono válido.');
+          return { isValid: false, reason: 'invalid-phone' };
+        }
+
+        field.value = sanitized;
+      }
+
+      if (!field.checkValidity()) {
+        return { isValid: false, reason: 'invalid' };
+      }
+
+      return { isValid: true, reason: null };
+    };
+
+    const getFirstInvalidStep = () => {
+      for (let i = 0; i < steps.length; i++) {
+        const field = getFieldForStep(i);
+
+        if (!field) {
+          continue;
+        }
+
+        const validation = validateField(field);
+
+        if (!validation.isValid) {
+          return { stepIndex: i, field, reason: validation.reason };
+        }
+      }
+
+      return null;
+    };
+
+    const canAdvanceStep = (stepIndex) => {
+      const field = getFieldForStep(stepIndex);
+
+      if (!field) {
+        return false;
+      }
+
+      return validateField(field).isValid;
+    };
+
+    const updateStepNavigationState = (stepIndex) => {
+      const panel = steps[stepIndex];
+
+      if (!(panel instanceof HTMLElement)) {
+        return;
+      }
+
+      const nextButton = panel.querySelector('[data-next-button]');
+
+      if (nextButton instanceof HTMLButtonElement) {
+        const enabled = canAdvanceStep(stepIndex);
+        nextButton.disabled = !enabled;
+        nextButton.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+      }
+    };
+
+    const canAdvance = () => {
+      const field = getFieldForStep(currentStep);
+
+      if (!field) {
+        return false;
+      }
+
+      const validation = validateField(field);
+
+      if (!validation.isValid) {
+        field.reportValidity();
+        return false;
+      }
+
+      return true;
+    };
+
+    const getValidationErrorMessage = (reason) => {
+      if (reason === 'invalid-email') {
+        return 'El correo no es válido. Usa un formato como nombre@dominio.com.';
+      }
+
+      if (reason === 'invalid-phone') {
+        return 'El teléfono debe ser numérico.';
+      }
+
+      if (reason === 'invalid') {
+        return 'Hay respuestas con formato inválido. Revisa el formulario.';
+      }
+
+      return '';
+    };
+
+    const buildSummary = () => {
+      const formData = new FormData(form);
+      const answers = [
+        ['Teléfono', formData.get('phone')],
+        ['Estilo', formData.get('vehicleStyle')],
+        ['Presupuesto', formData.get('budget')],
+        ['Plazo', formData.get('timeframe')],
+        ['Financiación', formData.get('financing')],
+        ['Ciudad', formData.get('city')],
+        ['Detalles', formData.get('extraDetails')]
+      ];
+
+      summaryField.value = answers
+        .filter(([, value]) => String(value ?? '').trim().length > 0)
+        .map(([label, value]) => `${label}: ${String(value ?? '').trim()}`)
+        .join('\n');
+    };
+
+    continueButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!canAdvance()) {
+          return;
+        }
+
+        setActiveStep(currentStep + 1);
+      });
+    });
+
+    choiceButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const currentPanel = button.closest('[data-step]');
+        const choiceName = button.getAttribute('data-choice-name');
+        const choiceValue = button.getAttribute('data-choice-value');
+
+        if (!(currentPanel instanceof HTMLElement) || !choiceName || !choiceValue) {
+          return;
+        }
+
+        const hiddenField = currentPanel.querySelector(`input[name="${choiceName}"]`);
+
+        if (!(hiddenField instanceof HTMLInputElement)) {
+          return;
+        }
+
+        hiddenField.value = choiceValue;
+
+        currentPanel.querySelectorAll('[data-choice-button]').forEach((choiceButton) => {
+          choiceButton.classList.toggle('is-selected', choiceButton === button);
+        });
+
+        window.setTimeout(() => {
+          setActiveStep(currentStep + 1);
+        }, 140);
+      });
+    });
+
+    answerFields.forEach((field) => {
+      if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
+        return;
+      }
+
+      const syncStepState = () => {
+        const panel = field.closest('[data-step]');
+
+        if (!(panel instanceof HTMLElement)) {
+          return;
+        }
+
+        const stepIndex = Number(panel.dataset.stepIndex);
+
+        if (Number.isNaN(stepIndex) || stepIndex !== currentStep) {
+          return;
+        }
+
+        updateStepNavigationState(stepIndex);
+      };
+
+      field.addEventListener('input', syncStepState);
+      field.addEventListener('change', syncStepState);
+    });
+
+    prevButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        setActiveStep(currentStep - 1);
+      });
+    });
+
+    nextButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!canAdvance()) {
+          return;
+        }
+
+        setActiveStep(currentStep + 1);
+      });
+    });
+
+    form.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' || event.shiftKey) {
+        return;
+      }
+
+      const target = event.target;
+
+      if (!(target instanceof HTMLElement)) {
+        return;
+      }
+
+      if (target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      if (!target.closest('[data-step]')) {
+        return;
+      }
+
+      if (currentStep >= steps.length - 1) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (canAdvance()) {
+        setActiveStep(currentStep + 1);
+      }
+    });
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
 
-      status.textContent = 'Enviando solicitud...';
+      const invalidStep = getFirstInvalidStep();
+
+      if (invalidStep) {
+        status.textContent = getValidationErrorMessage(invalidStep.reason);
+        setActiveStep(invalidStep.stepIndex);
+        invalidStep.field.reportValidity();
+        return;
+      }
+
+      buildSummary();
+      status.textContent = '';
 
       if (submitButton instanceof HTMLButtonElement) {
         submitButton.disabled = true;
+        submitButton.textContent = 'Enviando...';
+        submitButton.setAttribute('aria-busy', 'true');
       }
 
       try {
@@ -124,15 +793,51 @@ const statusId = 'contact-form-status';
           throw new Error(data?.error || `Error ${response.status} al enviar la solicitud.`);
         }
 
-        form.reset();
-        status.textContent = 'Solicitud enviada. Te contactaremos pronto.';
+        steps.forEach((panel) => {
+          panel.classList.remove('is-active', 'is-exit');
+          panel.setAttribute('aria-hidden', 'true');
+        });
+
+        successPanel.classList.add('is-active');
+        successPanel.setAttribute('aria-hidden', 'false');
+        progressBar.style.width = '100%';
+        counter.textContent = `${totalQuestions} / ${totalQuestions}`;
+        status.textContent = '';
       } catch (error) {
         status.textContent = error instanceof Error ? error.message : 'No se pudo enviar la solicitud.';
       } finally {
         if (submitButton instanceof HTMLButtonElement) {
           submitButton.disabled = false;
+          submitButton.removeAttribute('aria-busy');
+          submitButton.textContent = defaultSubmitLabel ?? 'Enviar formulario';
         }
       }
     });
+
+    openButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        if (successPanel.classList.contains('is-active')) {
+          resetFlow();
+        }
+
+        openModal();
+      });
+    });
+
+    closeButtons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        closeModal();
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+        closeModal();
+      }
+    });
+
+    updateProgress(currentStep);
+    updateStepNavigationState(currentStep);
   }
 </script>

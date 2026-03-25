@@ -14,7 +14,7 @@ const links = [
       <a href="#hero" class="font-display text-lg uppercase tracking-[0.2em] text-imc-silver">Imcarrows</a>
     </div>
 
-    <ul class="hidden items-center gap-8 text-sm uppercase tracking-[0.08em] text-imc-silver md:flex">
+    <ul class="hidden items-center gap-8 text-sm uppercase tracking-[0.08em] text-imc-silver lg:flex">
       {
         links.map((link) => (
           <li>
@@ -26,11 +26,12 @@ const links = [
       }
     </ul>
 
-    <a
-      href="#contacto"
-      class="rounded-md border border-imc-yellow bg-imc-yellow px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-imc-black transition hover:bg-imc-red hover:text-white"
+    <button
+      type="button"
+      data-open-contact-form
+      class="rounded-md border border-imc-yellow px-2 py-1 font-semibold bg-imc-yellow text-imc-black transition hover:bg-imc-red hover:text-white"
     >
-      Solicitar oferta
-    </a>
+      CONTACTAR
+    </button>
   </nav>
 </header>

@@ -8,25 +8,110 @@ export const POST: APIRoute = async ({ request }) => {
 
     const name = String(formData.get('name') ?? '');
     const email = String(formData.get('email') ?? '');
+    const phone = String(formData.get('phone') ?? '');
+    const carPurpose = String(formData.get('carPurpose') ?? '');
+    const priceRange = String(formData.get('priceRange') ?? '');
+    const deliveryTime = String(formData.get('deliveryTime') ?? '');
     const carModel = String(formData.get('carModel') ?? '');
-    const message = String(formData.get('message') ?? '');
+    const deliveryLocation = String(formData.get('deliveryLocation') ?? '');
+    const understandProcess = String(formData.get('understandProcess') ?? '');
+    const extraDetails = String(formData.get('extraDetails') ?? '');
 
-    if (!name || !email || !carModel || !message) {
+    if (!name || !email) {
       return Response.json({ ok: false, error: 'Faltan campos obligatorios.' }, { status: 400 });
     }
 
     const resend = new Resend(env.RESEND_API_KEY);
 
+    const emailHtml = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; background: white; }
+        .header { background: linear-gradient(135deg, #080808 0%, #1a1a1a 100%); color: white; padding: 30px; text-align: center; border-bottom: 3px solid #d9b565; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: 0.05em; }
+        .header p { margin: 8px 0 0 0; font-size: 13px; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.1em; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 28px; }
+        .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #d9b565; margin-bottom: 12px; border-bottom: 1px solid #e5e5e5; padding-bottom: 8px; }
+        .question-row { margin-bottom: 16px; }
+        .question-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #666; margin-bottom: 4px; }
+        .question-answer { font-size: 14px; color: #1a1a1a; padding: 8px 12px; background: #f9f9f9; border-left: 3px solid #d9b565; }
+        .contact-info { background: #f5f5f5; padding: 16px; border-radius: 6px; margin-bottom: 20px; }
+        .contact-info-row { margin-bottom: 10px; font-size: 13px; }
+        .contact-info-row strong { color: #080808; }
+        .footer { background: #f5f5f5; padding: 20px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #e5e5e5; }
+        .footer-brand { font-weight: 700; color: #333; margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>IMCARROWS</h1>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <div class="contact-info">
+                    <div class="contact-info-row"><strong><u>Nombre:</u></strong> ${name}</div>
+                    <div class="contact-info-row"><strong><u>Email:</u></strong> ${email}</div>
+                    <div class="contact-info-row"><strong><u>Teléfono:</u></strong> ${phone || 'No proporcionado'}</div> <br />
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Detalles de la Solicitud:</div> <br />
+                
+                <div class="question-row">
+                    <div class="question-label"><strong><u>¿El coche es para uso personal, para alquilar o revender?</u></strong></div>
+                    <div class="question-answer">${carPurpose || '—'}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>Presupuesto</u></strong></div>
+                    <div class="question-answer">${priceRange || '—'}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>¿Cuándo quieres tener tu coche en casa?</u></strong></div>
+                    <div class="question-answer">${deliveryTime || '—'}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>Marca y modelo deseado</u></strong></div>
+                    <div class="question-answer">${carModel || '—'}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>¿Dónde vas a recibir el coche?</u></strong></div>
+                    <div class="question-answer">${deliveryLocation || '—'}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>Confirmación del proceso</u></strong></div>
+                    <div class="question-answer">${understandProcess || '—'}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>¿Hay algo que te frena ahora mismo?</u></strong></div>
+                    <div class="question-answer">${extraDetails || '—'}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+    `;
+
     await resend.emails.send({
       from: env.CONTACT_FROM_EMAIL,
       to: env.CONTACT_TO_EMAIL,
-      subject: 'Nuevo contacto desde IMC Arrows',
-      html: `
-        <p><strong>Nombre:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Modelo deseado:</strong> ${carModel}</p>
-        <p><strong>Mensaje:</strong> ${message}</p>
-      `
+      subject: `Nueva solicitud de contacto - ${name}`,
+      html: emailHtml
     });
 
     return Response.json({ ok: true });
