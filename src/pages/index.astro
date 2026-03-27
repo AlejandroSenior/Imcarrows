@@ -10,9 +10,102 @@ import SecureLogistics from '@/components/sections/SecureLogistics.astro';
 import SelectionSearch from '@/components/sections/SelectionSearch.astro';
 import TechnicalInspection from '@/components/sections/TechnicalInspection.astro';
 import Layout from '@/layouts/Layout.astro';
+
+const title = 'Importar coche de Alemania a España | Imcarrows';
+const description =
+	'Importación integral de coches desde Alemania a España: búsqueda, inspección técnica, transporte seguro y legalización completa.';
+const image = '/imc-logo.webp';
+
+const siteUrl = Astro.site ?? new URL('https://imcarrows.com');
+const imageUrl = new URL(image, siteUrl).toString();
+
+const jsonLd = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		name: 'Imcarrows',
+		url: siteUrl.toString(),
+		logo: imageUrl,
+		email: 'imcarrows@gmail.com',
+		sameAs: [
+			'https://www.instagram.com/imcarrows',
+			'https://x.com/imcarrows',
+			'https://www.tiktok.com/@imcarrows',
+			'https://www.youtube.com/@imcarrows'
+		],
+		contactPoint: [
+			{
+				'@type': 'ContactPoint',
+				contactType: 'customer support',
+				email: 'imcarrows@gmail.com',
+				telephone: '+34 632 08 33 47',
+				areaServed: 'ES',
+				availableLanguage: ['es']
+			}
+		]
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: 'Imcarrows',
+		url: siteUrl.toString(),
+		inLanguage: 'es-ES'
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Service',
+		serviceType: 'Importación de coches desde Alemania a España',
+		provider: {
+			'@type': 'Organization',
+			name: 'Imcarrows',
+			url: siteUrl.toString()
+		},
+		areaServed: {
+			'@type': 'Country',
+			name: 'España'
+		},
+		description
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: [
+			{
+				'@type': 'Question',
+				name: '¿Qué garantía tiene un coche importado?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'Trabajamos con unidades revisadas y proveedores verificados. La cobertura depende del vehículo, pero siempre detallamos garantía comercial y fabricante antes de reservar.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: '¿Cuánto tarda el proceso completo?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'Normalmente entre 3 y 6 semanas según disponibilidad, inspección y tiempos de transporte. Te damos cronograma desde el primer día.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: '¿Compensa frente a comprar en España?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'En modelos concretos suele haber mejor equipamiento y precio en Alemania. Nuestro trabajo es validar que la operación sea real, segura y rentable.'
+				}
+			}
+		]
+	}
+];
 ---
 
-<Layout>
+<Layout title={title} description={description} image={image}>
+	<Fragment slot="head">
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd[0])}></script>
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd[1])}></script>
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd[2])}></script>
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd[3])}></script>
+	</Fragment>
 	<Navbar />
 	<main>
 		<Hero />
