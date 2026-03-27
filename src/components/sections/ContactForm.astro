@@ -18,7 +18,7 @@ const questions = [
   {
     key: 'email',
     label: 'Correo electrónico',
-    prompt: 'Nos pondremos en contacto contigo de forma personalizada.',
+    prompt: 'Te contactaremos personalmente.',
     type: 'email',
     placeholder: 'nombre@correo.com',
     autocomplete: 'email',
@@ -35,15 +35,15 @@ const questions = [
   },
   {
     key: 'carPurpose',
-    label: '¿El coche es para uso personal, para alquilar o revender?',
+    label: '¿Para qué se utilizará el vehículo?',
     prompt: 'Nos ayuda a filtrar oportunidades reales desde el inicio.',
     type: 'choice',
-    options: ['Uso personal', 'Revender', 'Alquilar', 'Usarlo un tiempo y luego revenderlo', 'Solo explorando opciones']
+    options: ['Uso personal', 'Reventa', 'Alquiler', 'Usarlo un tiempo y luego venderlo', 'Solo explorando opciones']
   },
   {
     key: 'priceRange',
-    label: '¿Qué presupuesto tienes?',
-    prompt: 'Incluye el rango o cifra aproximada, para ajustar la búsqueda a tus posibilidades.',
+    label: '¿Qué rango de precios estás considerando?',
+    prompt: 'Incluye la cifra aproximada, para ajustar la búsqueda a tu presupuesto.',
     type: 'choice',
     options: [
       'Menos de 10.000€',
@@ -57,39 +57,31 @@ const questions = [
   },
   {
     key: 'deliveryTime',
-    label: '¿Cuándo quieres tener tu coche en casa?',
+    label: '¿Cuándo te gustaría recibir el vehículo?',
     prompt: 'Si tienes flexibilidad, indícanos tu plazo ideal para que podamos priorizar opciones que se ajusten a él.',
     type: 'choice',
-    options: ['Lo antes posible', 'En 1-2 meses', 'En 3-4 meses', 'Más de 4 meses vista']
+    options: ['A la mayor brevedad posible', 'De 1 a 2 meses', 'De 3 a 4 meses', 'Sin previsión']
   },
   {
     key: 'carModel',
     label: 'Marca y modelo',
     prompt:
-      '⚠️ Nuestro servicio no consiste en enviar catálogos, sino en encontrar y negociar la mejor unidad para ti dentro de lo que realmente buscas. Cuanto más específico seas, mejor podremos ayudarte.',
+      'Nuestro objetivo es encontrar el coche perfecto para ti. Cuantos más detalles nos compartas sobre lo que tienes en mente, más rápida y exacta será nuestra búsqueda. ¡Ayúdanos a encontrar tu vehículo ideal!',
     type: 'text',
     placeholder: 'BMW M3 Touring',
     autocomplete: 'off'
   },
   {
     key: 'deliveryLocation',
-    label: '¿Dónde vas a recibir el coche?',
+    label: '¿En que ciudad de la península te encuentras?',
     prompt: 'Nos ayuda a planificar la logística, matriculación y posibles costes asociados.',
     type: 'choice',
     options: ['Península o Islas Baleares', 'IslasCanarias', 'Fuera de España']
   },
   {
-    key: 'understandProcess',
-    label: 'Para ayudarte a encontrar tu coche ideal, necesitamos que confirmes esto.',
-    prompt:
-      'Ten en cuenta que en tu caso podremos ayudarte con todo el proceso hasta que el coche llegue a tu ciudad, pero la parte de matriculación deberás gestionarla tú con tus propios contactos. ¿Quieres continuar?',
-    type: 'choice',
-    options: ['Sí, quiero seguir', 'No']
-  },
-  {
     key: 'extraDetails',
-    label: '¿Hay algo que te frena ahora mismo para comenzar la importación?',
-    prompt: 'Cuéntanos cualquier duda, miedo o inconveniente que tengas en mente. Queremos ayudarte a resolverlo.',
+    label: '¿Tienes alguna duda o preocupación antes de dar el paso de importar el coche?',
+    prompt: 'Siéntete libre de preguntar cualquier inquietud que necesites aclarar sobre nuestros servicios.',
     type: 'text',
     placeholder: 'Cuéntanos',
     autocomplete: 'off'

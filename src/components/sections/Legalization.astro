@@ -1,29 +1,27 @@
 ---
-const steps = ['ITV y homologacion tecnica', 'Modelo 576 y 06: impuestos y tramites', 'Matriculacion final y entrega'];
+const steps = ['ITV', 'Impuestos y trámites', 'Matriculación final y entrega'];
 ---
 
 <section id="legalization" class="bg-white/2 py-16">
   <div class="mx-auto grid w-full max-w-6xl gap-10 px-6 lg:grid-cols-2 lg:px-8">
     <div class="grid grid-cols-2 gap-4">
       <article class="rounded-2xl border border-white/10 bg-white/5 p-5">
-        <p class="text-xs uppercase tracking-[0.12em] text-imc-yellow">Homologacion</p>
-        <p class="mt-6 text-sm text-white/70">Documentacion tecnica adaptada a normativa espanola.</p>
+        <p class="text-xs tracking-[0.12em] text-imc-yellow">ITV</p>
+        <p class="mt-6 text-sm text-white/70">Nuestra ITV se encarga de tener la ficha técnica en el menor tiempo posible.</p>
       </article>
       <article class="rounded-2xl border border-white/10 bg-white/5 p-5">
-        <p class="text-xs uppercase tracking-[0.12em] text-imc-red">Placas</p>
-        <p class="mt-6 text-sm text-white/70">Gestion de matriculas temporales y definitivas.</p>
+        <p class="text-xs tracking-[0.12em] text-imc-red">GESTORÍA</p>
+        <p class="mt-6 text-sm text-white/70">El gestor colegiado gestiona la matriculación de tu vehículo de 24 a 48 horas.</p>
       </article>
       <article class="col-span-2 rounded-2xl border border-white/10 bg-[linear-gradient(120deg,rgba(217,181,101,0.2),rgba(16,16,16,0.6))] p-5">
-        <p class="text-xs uppercase tracking-[0.12em] text-imc-silver">Tasacion y registro</p>
-        <p class="mt-4 text-sm text-white/80">Coordinamos ITV, impuestos y DGT hasta tener llave lista para entrega.</p>
+        <p class="text-xs tracking-[0.12em] text-imc-silver">ENTREGA</p>
+        <p class="mt-4 text-sm text-white/80">El proceso de importación concluye y simplemente te queda disfrutar de tu nuevo coche.</p>
       </article>
     </div>
 
     <div>
-      <h2 class="text-3xl font-semibold text-imc-silver sm:text-4xl">Legalization</h2>
-      <p class="mt-4 text-white/70">
-        Proceso integral para matricular en Espana sin fricciones. Del laboratorio tecnico a la emision del permiso definitivo.
-      </p>
+      <h2 class="text-3xl font-semibold text-imc-silver sm:text-4xl">Matriculación</h2>
+      <p class="mt-4 text-white/70">Proceso integral para matricular tu coche en España.</p>
       <ol class="mt-8 space-y-3">
         {
           steps.map((step, index) => (
