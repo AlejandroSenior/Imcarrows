@@ -75,8 +75,41 @@ const questions = [
     key: 'deliveryLocation',
     label: '¿En que ciudad de la península te encuentras?',
     prompt: 'Nos ayuda a planificar la logística, matriculación y posibles costes asociados.',
-    type: 'choice',
-    options: ['Península o Islas Baleares', 'IslasCanarias', 'Fuera de España']
+    type: 'select',
+    options: [
+      'Madrid',
+      'Barcelona',
+      'Valencia',
+      'Sevilla',
+      'Bilbao',
+      'Málaga',
+      'Zaragoza',
+      'Murcia',
+      'Alicante',
+      'Córdoba',
+      'Valladolid',
+      'Vigo',
+      'Gijón',
+      'Oviedo',
+      'Salamanca',
+      'Toledo',
+      'León',
+      'Burgos',
+      'Pamplona',
+      'Logroño',
+      'Girona',
+      'Tarragona',
+      'Cuenca',
+      'Ávila',
+      'Segovia',
+      'Guadalajara',
+      'Badajoz',
+      'Cáceres',
+      'Huelva',
+      'Jaén',
+      'Granada',
+      'Almería'
+    ]
   },
   {
     key: 'extraDetails',
@@ -181,7 +214,45 @@ const questions = [
                     <h3 class="mt-4 text-balance text-xl font-semibold leading-tight text-white sm:text-2xl">{question.label}</h3>
                     <p class="mt-4 text-balance max-w-xl text-sm leading-7 text-white/68 sm:text-base">{question.prompt}</p>
 
-                    {question.type === 'choice' ? (
+                    {question.type === 'select' ? (
+                      <div class="mt-10 w-full">
+                        <select
+                          name="city"
+                          required
+                          data-answer-field
+                          class="w-full rounded-xl border border-white/14 bg-black/25 px-4 py-3 text-base text-white outline-none transition duration-300 focus:border-imc-yellow focus:bg-black/35 appearance-none cursor-pointer"
+                          style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22white%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22></polyline></svg>'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.5rem; padding-right: 2rem;"
+                        >
+                          <option value="" disabled selected class="bg-black/50">
+                            Selecciona una ciudad...
+                          </option>
+                          {question.options?.map((option) => (
+                            <option value={option} class="bg-black/50 text-white">
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                        {index === questions.length - 1 ? (
+                          <div class="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                            <button
+                              type="submit"
+                              data-submit-button
+                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
+                            >
+                              Enviar formulario
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            data-continue-button
+                            class="mt-8 rounded-full border border-white/16 px-7 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-white transition hover:border-imc-yellow hover:bg-imc-yellow hover:text-imc-black"
+                          >
+                            Continuar
+                          </button>
+                        )}
+                      </div>
+                    ) : question.type === 'choice' ? (
                       <div class="mt-10 grid w-full gap-3 sm:grid-cols-2">
                         <input type="hidden" name={question.key} data-answer-field required />
                         {question.options?.map((option) => (
@@ -201,7 +272,6 @@ const questions = [
                         <textarea
                           name={question.key}
                           rows="5"
-                          required
                           data-answer-field
                           placeholder={question.placeholder}
                           class="w-full rounded-[1.6rem] border border-white/14 bg-black/25 px-6 py-5 text-base leading-7 text-white outline-none transition duration-300 placeholder:text-white/28 focus:border-imc-yellow focus:bg-black/35"
@@ -493,7 +563,7 @@ const questions = [
       }
 
       const field = panel.querySelector('[data-answer-field]');
-      return field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement ? field : null;
+      return field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement ? field : null;
     };
 
     const normalizePhone = (value) => value.replace(/[\s()-]/g, '');
@@ -677,7 +747,7 @@ const questions = [
     });
 
     answerFields.forEach((field) => {
-      if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
+      if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement)) {
         return;
       }
 
