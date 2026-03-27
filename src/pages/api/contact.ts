@@ -2,6 +2,14 @@ import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { Resend } from 'resend';
 
+const escapeHtml = (value: string) =>
+    value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     const formData = await request.formData();
@@ -9,12 +17,11 @@ export const POST: APIRoute = async ({ request }) => {
     const name = String(formData.get('name') ?? '');
     const email = String(formData.get('email') ?? '');
     const phone = String(formData.get('phone') ?? '');
-    const carPurpose = String(formData.get('carPurpose') ?? '');
-    const priceRange = String(formData.get('priceRange') ?? '');
-    const deliveryTime = String(formData.get('deliveryTime') ?? '');
+        const carPurpose = String(formData.get('carPurpose') ?? formData.get('vehicleStyle') ?? '');
+        const priceRange = String(formData.get('priceRange') ?? formData.get('budget') ?? '');
+        const deliveryTime = String(formData.get('deliveryTime') ?? formData.get('timeframe') ?? '');
     const carModel = String(formData.get('carModel') ?? '');
-    const deliveryLocation = String(formData.get('deliveryLocation') ?? '');
-    const understandProcess = String(formData.get('understandProcess') ?? '');
+        const deliveryLocation = String(formData.get('city') ?? formData.get('deliveryLocation') ?? '');
     const extraDetails = String(formData.get('extraDetails') ?? '');
 
     if (!name || !email) {
@@ -57,9 +64,9 @@ export const POST: APIRoute = async ({ request }) => {
         <div class="content">
             <div class="section">
                 <div class="contact-info">
-                    <div class="contact-info-row"><strong><u>Nombre:</u></strong> ${name}</div>
-                    <div class="contact-info-row"><strong><u>Email:</u></strong> ${email}</div>
-                    <div class="contact-info-row"><strong><u>Teléfono:</u></strong> ${phone || 'No proporcionado'}</div> <br />
+                    <div class="contact-info-row"><strong><u>Nombre:</u></strong> ${escapeHtml(name)}</div>
+                    <div class="contact-info-row"><strong><u>Email:</u></strong> ${escapeHtml(email)}</div>
+                    <div class="contact-info-row"><strong><u>Teléfono:</u></strong> ${escapeHtml(phone || 'No proporcionado')}</div> <br />
                 </div>
             </div>
 
@@ -67,38 +74,33 @@ export const POST: APIRoute = async ({ request }) => {
                 <div class="section-title">Detalles de la Solicitud:</div> <br />
                 
                 <div class="question-row">
-                    <div class="question-label"><strong><u>¿El coche es para uso personal, para alquilar o revender?</u></strong></div>
-                    <div class="question-answer">${carPurpose || '—'}</div>
+                    <div class="question-label"><strong><u>¿Para qué se utilizará el vehículo?</u></strong></div>
+                    <div class="question-answer">${escapeHtml(carPurpose || '—')}</div>
                 </div>
 
                 <div class="question-row">
-                    <div class="question-label"><strong><u>Presupuesto</u></strong></div>
-                    <div class="question-answer">${priceRange || '—'}</div>
+                    <div class="question-label"><strong><u>¿Qué rango de precios estás considerando?</u></strong></div>
+                    <div class="question-answer">${escapeHtml(priceRange || '—')}</div>
                 </div>
 
                 <div class="question-row">
-                    <div class="question-label"><strong><u>¿Cuándo quieres tener tu coche en casa?</u></strong></div>
-                    <div class="question-answer">${deliveryTime || '—'}</div>
+                    <div class="question-label"><strong><u>¿Cuándo te gustaría recibir el vehículo?</u></strong></div>
+                    <div class="question-answer">${escapeHtml(deliveryTime || '—')}</div>
                 </div>
 
                 <div class="question-row">
-                    <div class="question-label"><strong><u>Marca y modelo deseado</u></strong></div>
-                    <div class="question-answer">${carModel || '—'}</div>
+                    <div class="question-label"><strong><u>Marca y modelo</u></strong></div>
+                    <div class="question-answer">${escapeHtml(carModel || '—')}</div>
                 </div>
 
                 <div class="question-row">
-                    <div class="question-label"><strong><u>¿Dónde vas a recibir el coche?</u></strong></div>
-                    <div class="question-answer">${deliveryLocation || '—'}</div>
+                    <div class="question-label"><strong><u>¿En que ciudad de la península te encuentras?</u></strong></div>
+                    <div class="question-answer">${escapeHtml(deliveryLocation || '—')}</div>
                 </div>
 
                 <div class="question-row">
-                    <div class="question-label"><strong><u>Confirmación del proceso</u></strong></div>
-                    <div class="question-answer">${understandProcess || '—'}</div>
-                </div>
-
-                <div class="question-row">
-                    <div class="question-label"><strong><u>¿Hay algo que te frena ahora mismo?</u></strong></div>
-                    <div class="question-answer">${extraDetails || '—'}</div>
+                    <div class="question-label"><strong><u>¿Tienes alguna duda o preocupación antes de dar el paso de importar el coche?</u></strong></div>
+                    <div class="question-answer">${escapeHtml(extraDetails || '—')}</div>
                 </div>
             </div>
         </div>

@@ -115,7 +115,7 @@ const questions = [
     key: 'extraDetails',
     label: '¿Tienes alguna duda o preocupación antes de dar el paso de importar el coche?',
     prompt: 'Siéntete libre de preguntar cualquier inquietud que necesites aclarar sobre nuestros servicios.',
-    type: 'text',
+    type: 'textarea',
     placeholder: 'Cuéntanos',
     autocomplete: 'off'
   }
@@ -580,7 +580,7 @@ const questions = [
       field.setCustomValidity('');
 
       if (!value) {
-        return { isValid: false, reason: 'empty' };
+        return field.required ? { isValid: false, reason: 'empty' } : { isValid: true, reason: null };
       }
 
       if (field.name === 'email' && !emailRegex.test(value)) {
