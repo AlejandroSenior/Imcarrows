@@ -3,12 +3,7 @@ import { env } from 'cloudflare:workers';
 import { Resend } from 'resend';
 
 const escapeHtml = (value: string) =>
-    value
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+  value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -17,11 +12,11 @@ export const POST: APIRoute = async ({ request }) => {
     const name = String(formData.get('name') ?? '');
     const email = String(formData.get('email') ?? '');
     const phone = String(formData.get('phone') ?? '');
-        const carPurpose = String(formData.get('carPurpose') ?? formData.get('vehicleStyle') ?? '');
-        const priceRange = String(formData.get('priceRange') ?? formData.get('budget') ?? '');
-        const deliveryTime = String(formData.get('deliveryTime') ?? formData.get('timeframe') ?? '');
+    const carPurpose = String(formData.get('carPurpose') ?? formData.get('vehicleStyle') ?? '');
+    const priceRange = String(formData.get('priceRange') ?? formData.get('budget') ?? '');
+    const deliveryTime = String(formData.get('deliveryTime') ?? formData.get('timeframe') ?? '');
     const carModel = String(formData.get('carModel') ?? '');
-        const deliveryLocation = String(formData.get('city') ?? formData.get('deliveryLocation') ?? '');
+    const deliveryLocation = String(formData.get('city') ?? formData.get('deliveryLocation') ?? '');
     const extraDetails = String(formData.get('extraDetails') ?? '');
 
     if (!name || !email) {
