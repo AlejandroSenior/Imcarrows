@@ -4,18 +4,25 @@ const links = [
   { label: 'Servicios', href: '#services' },
   { label: 'FAQs', href: '#faqs' }
 ];
+
+const isHomePage = Astro.url.pathname === '/';
+const brandHref = isHomePage ? '#hero' : '/';
+const navLinks = links.map((link) => ({
+  ...link,
+  href: isHomePage ? link.href : `/${link.href}`
+}));
 ---
 
 <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-imc-black/80 backdrop-blur-xl">
   <nav class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
-    <a href="#hero" class="flex items-center gap-4">
+    <a href={brandHref} class="flex items-center gap-4">
       <img src="/imc-logo.webp" alt="Imcarrows Logo" class="w-10" />
       <p class="font-display text-lg uppercase tracking-[0.2em] text-imc-silver">Imcarrows</p>
     </a>
 
     <ul class="hidden items-center gap-8 text-sm uppercase tracking-[0.08em] text-imc-silver lg:flex">
       {
-        links.map((link) => (
+        navLinks.map((link) => (
           <li>
             <a href={link.href} class="transition hover:text-imc-yellow">
               {link.label}
