@@ -1,0 +1,289 @@
+---
+interface CaseData {
+  name: string;
+  city: string;
+  image: string;
+  nombreCoche: string;
+  año: number;
+  km: string;
+  costeVehiculo: number;
+  costeNegociacion: number;
+  gastosExportacion: number;
+  impMatriculacion: number;
+  impCirculacion: number;
+  itvTasas: number;
+  placas: number;
+  precioEspana: number;
+  badge?: string;
+}
+
+const rawCases: CaseData[] = [
+  {
+    name: 'Carlos M.',
+    city: 'Palma de Mallorca',
+    image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=85',
+    nombreCoche: 'BMW M3 Competition',
+    año: 2021,
+    km: '45.000 km',
+    costeVehiculo: 52_000,
+    costeNegociacion: 48_500,
+    gastosExportacion: 1_200,
+    impMatriculacion: 5_820,
+    impCirculacion: 280,
+    itvTasas: 165,
+    placas: 110,
+    precioEspana: 65_000
+  },
+  {
+    name: 'Ana R.',
+    city: 'Madrid',
+    image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=85',
+    nombreCoche: 'Audi A6 Avant 45 TDI',
+    año: 2020,
+    km: '62.000 km',
+    costeVehiculo: 34_000,
+    costeNegociacion: 31_500,
+    gastosExportacion: 1_100,
+    impMatriculacion: 1_260,
+    impCirculacion: 245,
+    itvTasas: 165,
+    placas: 110,
+    precioEspana: 40_000,
+    badge: 'Mejor % ahorro'
+  },
+  {
+    name: 'Javier T.',
+    city: 'Valencia',
+    image: 'https://images.unsplash.com/photo-1617654112368-307921291f42?auto=format&fit=crop&w=800&q=85',
+    nombreCoche: 'Mercedes GLE 400d AMG',
+    año: 2022,
+    km: '28.000 km',
+    costeVehiculo: 68_000,
+    costeNegociacion: 63_000,
+    gastosExportacion: 1_350,
+    impMatriculacion: 6_930,
+    impCirculacion: 365,
+    itvTasas: 165,
+    placas: 110,
+    precioEspana: 82_000
+  }
+];
+
+function eur(n: number): string {
+  return n.toLocaleString('es-ES') + '\u202f€';
+}
+
+const cases = rawCases.map((c) => {
+  const total = c.costeNegociacion + c.gastosExportacion + c.impMatriculacion + c.impCirculacion + c.itvTasas + c.placas;
+  const ahorro = c.precioEspana - total;
+  const pct = Math.round((ahorro / c.precioEspana) * 100);
+  const negSaving = c.costeVehiculo - c.costeNegociacion;
+  return { ...c, total, ahorro, pct, negSaving };
+});
+---
+
+<section class="relative overflow-hidden py-24 sm:py-32" style="background-color:#070707;">
+  <!-- subtle dot-grid background -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 opacity-60"
+    style="background-image:radial-gradient(rgba(255,255,255,0.06) 1px,transparent 1px);background-size:28px 28px;"
+  >
+  </div>
+  <!-- accent glow -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute left-1/2 top-0 h-72 w-170 -translate-x-1/2 rounded-full blur-[120px]"
+    style="background:radial-gradient(ellipse,rgba(217,181,101,0.07) 0%,transparent 70%);"
+  >
+  </div>
+  <!-- edge fades -->
+  <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-[#060606] to-transparent"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-[#060606] to-transparent"></div>
+
+  <div class="relative mx-auto max-w-7xl px-5 sm:px-8">
+    <!-- ── Section Header ─────────────────────────── -->
+    <div class="mb-14 text-center sm:mb-16">
+      <div class="mb-4 flex items-center justify-center gap-4">
+        <div class="h-px w-10 bg-imc-yellow/30"></div>
+        <p class="text-[0.65rem] font-medium uppercase tracking-[0.3em] text-imc-yellow/80">Casos de Éxito</p>
+        <div class="h-px w-10 bg-imc-yellow/30"></div>
+      </div>
+      <h2 class="mb-4 text-3xl font-semibold leading-tight tracking-[-0.03em] text-imc-silver sm:text-4xl lg:text-[2.8rem]">
+        Números reales.<br class="hidden sm:block" /> Clientes reales.
+      </h2>
+      <p class="mx-auto max-w-xl text-[0.9rem] leading-relaxed text-white/42">
+        Transparencia total, de principio a fin. Desglose de costes reales de tres importaciones gestionadas por Imcarrows.
+      </p>
+    </div>
+
+    <!-- ── Cards ──────────────────────────────────── -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {
+        cases.map((c) => (
+          <article
+            class="group relative flex flex-col overflow-hidden rounded-2xl border border-white/8 bg-[#0d0d0d] transition-all duration-500 hover:border-white/13 hover:shadow-[0_28px_72px_rgba(0,0,0,0.55)]"
+            data-case-card
+          >
+            {/* Badge */}
+            {c.badge && (
+              <div class="absolute right-3.5 top-3.5 z-20">
+                <span class="rounded-full border border-imc-yellow/35 bg-[#0d0d0d]/85 px-3 py-1 text-[0.62rem] font-medium uppercase tracking-[0.22em] text-imc-yellow/90 backdrop-blur-md">
+                  {c.badge}
+                </span>
+              </div>
+            )}
+
+            {/* ── Car Image ── */}
+            <div class="relative h-52 shrink-0 overflow-hidden">
+              <img
+                src={c.image}
+                alt={`${c.nombreCoche}, importado desde Alemania a ${c.city}`}
+                width="800"
+                height="450"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              {/* gradient overlay */}
+              <div class="absolute inset-0 bg-linear-to-t from-[#0d0d0d] via-[#0d0d0d]/35 to-transparent" />
+
+              {/* Person info */}
+              <div class="absolute inset-x-0 bottom-0 px-5 pb-4">
+                <div class="flex items-center gap-1.5">
+                  {/* verified icon */}
+                  <svg class="h-3.5 w-3.5 shrink-0 text-imc-yellow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span class="text-[0.95rem] font-semibold text-white">{c.name}</span>
+                </div>
+                <div class="mt-0.5 flex items-center gap-1 text-[0.72rem] text-white/50">
+                  <svg class="h-3 w-3 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path
+                      fill-rule="evenodd"
+                      d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  {c.city}
+                </div>
+              </div>
+            </div>
+
+            {/* ── Cost Breakdown ── */}
+            <div class="flex flex-1 flex-col px-5 pb-5 pt-5">
+              {/* Car header */}
+              <div class="mb-4">
+                <p class="text-[0.95rem] font-semibold text-imc-silver">{c.nombreCoche}</p>
+                <p class="mt-0.5 text-[0.72rem] text-white/35">
+                  {c.año} · {c.km}
+                </p>
+              </div>
+
+              {/* Separator */}
+              <div class="mb-4 h-px bg-white/8" />
+
+              {/* Rows */}
+              <div class="flex flex-1 flex-col gap-y-2.5">
+                {/* Coste vehículo — tachado */}
+                <div class="flex items-center justify-between">
+                  <span class="text-[0.78rem] text-white/38">Coste del vehículo</span>
+                  <span class="text-[0.78rem] tabular-nums text-white/38 line-through decoration-white/25">{eur(c.costeVehiculo)}</span>
+                </div>
+
+                {/* Tras negociación — gold highlight */}
+                <div class="-mx-2 flex items-center justify-between rounded-xl border border-imc-yellow/15 bg-imc-yellow/[0.07] px-3 py-2.5">
+                  <div class="flex items-center gap-1.5">
+                    <svg class="h-3 w-3 shrink-0 text-imc-yellow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <span class="text-[0.78rem] font-medium text-imc-yellow/85">Tras negociación</span>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-[0.9rem] font-bold tabular-nums leading-tight text-imc-yellow">{eur(c.costeNegociacion)}</p>
+                    <p class="text-[0.62rem] leading-tight text-imc-yellow/50">-{eur(c.negSaving)} ahorrados</p>
+                  </div>
+                </div>
+
+                {/* Rest of costs */}
+                {[
+                  { label: 'Gastos de exportación', value: c.gastosExportacion },
+                  { label: 'Imp. de matriculación', value: c.impMatriculacion },
+                  { label: 'Imp. de circulación', value: c.impCirculacion },
+                  { label: 'ITV + Tasas', value: c.itvTasas },
+                  { label: 'Placas definitivas', value: c.placas }
+                ].map((row) => (
+                  <div class="flex items-center justify-between">
+                    <span class="text-[0.78rem] text-white/42">{row.label}</span>
+                    <span class="text-[0.78rem] font-medium tabular-nums text-white/65">{eur(row.value)}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Total */}
+              <div class="mt-4 border-t border-white/12 pt-4">
+                <div class="flex items-baseline justify-between">
+                  <span class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-white/55">Total pagado</span>
+                  <span class="text-2xl font-bold tabular-nums tracking-tight text-imc-silver">{eur(c.total)}</span>
+                </div>
+              </div>
+
+              {/* Savings chip */}
+              <div
+                class="mt-3 rounded-xl border border-imc-yellow/18 px-4 py-3"
+                style="background:linear-gradient(135deg,rgba(217,181,101,0.1),rgba(217,181,101,0.04));"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-[0.62rem] font-medium uppercase tracking-[0.18em] text-imc-yellow/55">Ahorro vs. España</p>
+                    <p class="mt-0.5 text-[0.7rem] text-white/28">Precio mercado: {eur(c.precioEspana)}</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-lg font-bold tabular-nums text-imc-yellow">-{eur(c.ahorro)}</p>
+                    <p class="text-[0.68rem] font-medium text-imc-yellow/55">un {c.pct}% menos</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const cards = document.querySelectorAll<HTMLElement>('[data-case-card]');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const card = entry.target as HTMLElement;
+          const idx = Array.from(cards).indexOf(card);
+          setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, idx * 110);
+          observer.unobserve(card);
+        }
+      });
+    },
+    { threshold: 0.06 }
+  );
+
+  cards.forEach((card) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(28px)';
+    card.style.transition = 'opacity 0.65s ease, transform 0.65s ease';
+    observer.observe(card);
+  });
+</script>
