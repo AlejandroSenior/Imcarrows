@@ -10,6 +10,7 @@ export const POST: APIRoute = async ({ request }) => {
     const formData = await request.formData();
 
     const name = String(formData.get('name') ?? '');
+    const howKnowUs = String(formData.get('howKnowUs') ?? '');
     const email = String(formData.get('email') ?? '');
     const phone = String(formData.get('phone') ?? '');
     const carPurpose = String(formData.get('carPurpose') ?? formData.get('vehicleStyle') ?? '');
@@ -67,7 +68,12 @@ export const POST: APIRoute = async ({ request }) => {
 
             <div class="section">
                 <div class="section-title">Detalles de la Solicitud:</div> <br />
-                
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>¿Cómo nos conociste?</u></strong></div>
+                    <div class="question-answer">${escapeHtml(howKnowUs || '—')}</div>
+                </div>
+
                 <div class="question-row">
                     <div class="question-label"><strong><u>¿Para qué se utilizará el vehículo?</u></strong></div>
                     <div class="question-answer">${escapeHtml(carPurpose || '—')}</div>
