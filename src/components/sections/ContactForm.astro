@@ -241,8 +241,58 @@ const questions = [
                             </option>
                           ))}
                         </select>
-                        {index === questions.length - 1 ? (
+                        {index === questions.length - 1 && (
                           <div class="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                            <button
+                              type="submit"
+                              data-submit-button
+                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
+                            >
+                              Enviar formulario
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ) : question.type === 'choice' ? (
+                      <div class="mt-10 w-full">
+                        <div class="grid w-full gap-3 sm:grid-cols-2">
+                          <input type="hidden" name={question.key} data-answer-field required={question.required !== false} />
+                          {question.options?.map((option) => (
+                            <button
+                              type="button"
+                              class="tf-choice rounded-2xl border border-white/14 bg-white/6 px-5 py-3 text-left text-sm font-medium text-white transition duration-300 hover:border-imc-yellow/60 hover:bg-imc-yellow/10 hover:text-imc-yellow"
+                              data-choice-button
+                              data-choice-name={question.key}
+                              data-choice-value={option}
+                            >
+                              {option}
+                            </button>
+                          ))}
+                        </div>
+
+                        {index === questions.length - 1 && (
+                          <div class="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                            <button
+                              type="submit"
+                              data-submit-button
+                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
+                            >
+                              Enviar formulario
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ) : question.type === 'textarea' ? (
+                      <div class="mt-10 w-full">
+                        <textarea
+                          name={question.key}
+                          rows="5"
+                          data-answer-field
+                          placeholder={question.placeholder}
+                          class="w-full rounded-[1.6rem] border border-white/14 bg-black/25 px-6 py-5 text-base leading-7 text-white outline-none transition duration-300 placeholder:text-white/28 focus:border-imc-yellow focus:bg-black/35"
+                        />
+                        {index === questions.length - 1 ? (
+                          <div class="mt-5 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
                             <button
                               type="submit"
                               data-submit-button
@@ -260,40 +310,6 @@ const questions = [
                             Continuar
                           </button>
                         )}
-                      </div>
-                    ) : question.type === 'choice' ? (
-                      <div class="mt-10 grid w-full gap-3 sm:grid-cols-2">
-                        <input type="hidden" name={question.key} data-answer-field required={question.required !== false} />
-                        {question.options?.map((option) => (
-                          <button
-                            type="button"
-                            class="tf-choice rounded-2xl border border-white/14 bg-white/6 px-5 py-3 text-left text-sm font-medium text-white transition duration-300 hover:border-imc-yellow/60 hover:bg-imc-yellow/10 hover:text-imc-yellow"
-                            data-choice-button
-                            data-choice-name={question.key}
-                            data-choice-value={option}
-                          >
-                            {option}
-                          </button>
-                        ))}
-                      </div>
-                    ) : question.type === 'textarea' ? (
-                      <div class="mt-10 w-full">
-                        <textarea
-                          name={question.key}
-                          rows="5"
-                          data-answer-field
-                          placeholder={question.placeholder}
-                          class="w-full rounded-[1.6rem] border border-white/14 bg-black/25 px-6 py-5 text-base leading-7 text-white outline-none transition duration-300 placeholder:text-white/28 focus:border-imc-yellow focus:bg-black/35"
-                        />
-                        <div class="mt-5 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-                          <button
-                            type="submit"
-                            data-submit-button
-                            class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
-                          >
-                            Enviar formulario
-                          </button>
-                        </div>
                       </div>
                     ) : (
                       <div class="mt-10 w-full">
@@ -777,6 +793,18 @@ const questions = [
 
       field.addEventListener('input', syncStepState);
       field.addEventListener('change', syncStepState);
+
+      if (field instanceof HTMLSelectElement) {
+        field.addEventListener('change', () => {
+          if (currentStep >= steps.length - 1) {
+            return;
+          }
+
+          if (canAdvance()) {
+            setActiveStep(currentStep + 1);
+          }
+        });
+      }
     });
 
     prevButtons.forEach((button) => {
