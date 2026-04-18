@@ -8,44 +8,20 @@ const successId = 'contact-form-success';
 
 const questions = [
   {
-    key: 'name',
-    label: 'Nombre y apellidos',
-    prompt: 'Queremos dirigirnos a ti como corresponde.',
-    type: 'text',
-    placeholder: 'Nombre y apellidos',
-    autocomplete: 'name'
-  },
-  {
-    key: 'howKnowUs',
-    label: '¿Cómo nos conociste?',
-    prompt: 'Queremos saber cómo llegaste a nosotros para mejorar nuestra comunicación y servicios.',
-    type: 'choice',
-    options: ['Página web', 'TikTok', 'Instagram', 'YouTube', 'Facebook', 'X', 'Por recomendación']
-  },
-  {
-    key: 'email',
-    label: 'Correo electrónico',
-    prompt: 'Te contactaremos personalmente.',
-    type: 'email',
-    placeholder: 'nombre@correo.com',
-    autocomplete: 'email',
-    pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$'
-  },
-  {
-    key: 'phone',
-    label: 'Número de teléfono',
-    prompt: 'Solo para coordinar contigo de forma directa.',
-    type: 'tel',
-    placeholder: '+34 600 000 000',
-    autocomplete: 'tel',
-    pattern: '^(?:\\+34|0034)?[6789]\\d{8}$'
-  },
-  {
     key: 'carPurpose',
     label: '¿Para qué se utilizará el vehículo?',
     prompt: 'Nos ayuda a filtrar oportunidades reales desde el inicio.',
     type: 'choice',
     options: ['Uso personal', 'Reventa', 'Alquiler', 'Usarlo un tiempo y luego venderlo', 'Solo explorando opciones']
+  },
+  {
+    key: 'carModel',
+    label: 'Marca y modelo',
+    prompt:
+      'Nuestro objetivo es encontrar el coche perfecto para ti. Cuantos más detalles nos compartas sobre lo que tienes en mente, más rápida y exacta será nuestra búsqueda. ¡Ayúdanos a encontrar tu vehículo ideal!',
+    type: 'text',
+    placeholder: 'BMW M3 Touring',
+    autocomplete: 'off'
   },
   {
     key: 'priceRange',
@@ -68,15 +44,6 @@ const questions = [
     prompt: 'Si tienes flexibilidad, indícanos tu plazo ideal para que podamos priorizar opciones que se ajusten a él.',
     type: 'choice',
     options: ['A la mayor brevedad posible', 'De 1 a 2 meses', 'De 3 a 4 meses', 'Sin previsión']
-  },
-  {
-    key: 'carModel',
-    label: 'Marca y modelo',
-    prompt:
-      'Nuestro objetivo es encontrar el coche perfecto para ti. Cuantos más detalles nos compartas sobre lo que tienes en mente, más rápida y exacta será nuestra búsqueda. ¡Ayúdanos a encontrar tu vehículo ideal!',
-    type: 'text',
-    placeholder: 'BMW M3 Touring',
-    autocomplete: 'off'
   },
   {
     key: 'deliveryLocation',
@@ -125,6 +92,41 @@ const questions = [
     type: 'textarea',
     placeholder: 'Cuéntanos',
     autocomplete: 'off'
+  },
+  {
+    key: 'name',
+    label: 'Nombre y apellidos',
+    prompt: 'Queremos dirigirnos a ti como corresponde.',
+    type: 'text',
+    placeholder: 'Nombre y apellidos',
+    autocomplete: 'name'
+  },
+  {
+    key: 'email',
+    label: 'Correo electrónico',
+    prompt: 'Te contactaremos personalmente.',
+    type: 'email',
+    placeholder: 'nombre@correo.com',
+    autocomplete: 'email',
+    pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$'
+  },
+  {
+    key: 'phone',
+    label: 'Número de teléfono',
+    prompt: 'Opcional. Solo para coordinar contigo de forma directa.',
+    type: 'tel',
+    placeholder: '+34 600 000 000',
+    autocomplete: 'tel',
+    pattern: '^(?:\\+34|0034)?[6789]\\d{8}$',
+    required: false
+  },
+  {
+    key: 'howKnowUs',
+    label: '¿Cómo nos conociste?',
+    prompt: 'Opcional. Queremos saber cómo llegaste a nosotros para mejorar nuestra comunicación y servicios.',
+    type: 'choice',
+    required: false,
+    options: ['Página web', 'TikTok', 'Instagram', 'YouTube', 'Facebook', 'X', 'Por recomendación']
   }
 ];
 ---
@@ -225,7 +227,7 @@ const questions = [
                       <div class="mt-10 w-full">
                         <select
                           name="city"
-                          required
+                          required={question.required !== false}
                           data-answer-field
                           class="w-full rounded-xl border border-white/14 bg-black/25 px-4 py-3 text-base text-white outline-none transition duration-300 focus:border-imc-yellow focus:bg-black/35 appearance-none cursor-pointer"
                           style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22white%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22></polyline></svg>'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.5rem; padding-right: 2rem;"
@@ -261,7 +263,7 @@ const questions = [
                       </div>
                     ) : question.type === 'choice' ? (
                       <div class="mt-10 grid w-full gap-3 sm:grid-cols-2">
-                        <input type="hidden" name={question.key} data-answer-field required />
+                        <input type="hidden" name={question.key} data-answer-field required={question.required !== false} />
                         {question.options?.map((option) => (
                           <button
                             type="button"
@@ -298,7 +300,7 @@ const questions = [
                         <input
                           name={question.key}
                           type={question.type === 'email' ? 'email' : question.type === 'tel' ? 'tel' : 'text'}
-                          required
+                          required={question.required !== false}
                           data-answer-field
                           autocomplete={question.autocomplete}
                           placeholder={question.placeholder}
@@ -696,13 +698,16 @@ const questions = [
     const buildSummary = () => {
       const formData = new FormData(form);
       const answers = [
-        ['Teléfono', formData.get('phone')],
-        ['Estilo', formData.get('vehicleStyle')],
-        ['Presupuesto', formData.get('budget')],
-        ['Plazo', formData.get('timeframe')],
-        ['Financiación', formData.get('financing')],
+        ['Uso del vehículo', formData.get('carPurpose')],
+        ['Marca y modelo', formData.get('carModel')],
+        ['Rango de precios', formData.get('priceRange')],
+        ['Plazo de entrega', formData.get('deliveryTime')],
         ['Ciudad', formData.get('city')],
-        ['Detalles', formData.get('extraDetails')]
+        ['Dudas o preocupaciones', formData.get('extraDetails')],
+        ['Nombre', formData.get('name')],
+        ['Correo', formData.get('email')],
+        ['Teléfono', formData.get('phone')],
+        ['Cómo nos conoció', formData.get('howKnowUs')]
       ];
 
       summaryField.value = answers
