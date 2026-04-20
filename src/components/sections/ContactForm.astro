@@ -8,13 +8,6 @@ const successId = 'contact-form-success';
 
 const questions = [
   {
-    key: 'carPurpose',
-    label: '¿Para qué se utilizará el vehículo?',
-    prompt: 'Nos ayuda a filtrar oportunidades reales desde el inicio.',
-    type: 'choice',
-    options: ['Uso personal', 'Reventa', 'Alquiler', 'Usarlo un tiempo y luego venderlo', 'Solo explorando opciones']
-  },
-  {
     key: 'carModel',
     label: 'Marca y modelo',
     prompt:
@@ -94,6 +87,13 @@ const questions = [
     autocomplete: 'off'
   },
   {
+    key: 'carPurpose',
+    label: '¿Para qué se utilizará el vehículo?',
+    prompt: 'Nos ayuda a filtrar oportunidades reales desde el inicio.',
+    type: 'choice',
+    options: ['Uso personal', 'Reventa', 'Alquiler', 'Usarlo un tiempo y luego venderlo', 'Solo explorando opciones']
+  },
+  {
     key: 'name',
     label: 'Nombre y apellidos',
     prompt: 'Queremos dirigirnos a ti como corresponde.',
@@ -117,8 +117,7 @@ const questions = [
     type: 'tel',
     placeholder: '+34 600 000 000',
     autocomplete: 'tel',
-    pattern: '^(?:\\+34|0034)?[6789]\\d{8}$',
-    required: false
+    pattern: '^(?:\\+34|0034)?[6789]\\d{8}$'
   },
   {
     key: 'howKnowUs',
@@ -192,7 +191,7 @@ const questions = [
                           type="button"
                           data-prev-button
                           data-step-index={index}
-                          class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6 text-white transition hover:border-white hover:bg-white/12 hover:text-imc-yellow"
+                          class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6 text-white transition hover:border-white hover:bg-white/12 hover:text-imc-yellow cursor-pointer"
                           aria-label="Pregunta anterior"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">
@@ -211,7 +210,7 @@ const questions = [
                           data-next-button
                           data-step-index={index}
                           disabled
-                          class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6 text-white transition hover:border-white hover:bg-white/12 hover:text-imc-yellow disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-white/35 disabled:hover:border-white/10 disabled:hover:bg-white/5 disabled:hover:text-white/35"
+                          class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6 text-white transition hover:border-white hover:bg-white/12 hover:text-imc-yellow disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-white/35 disabled:hover:border-white/10 disabled:hover:bg-white/5 disabled:hover:text-white/35 cursor-pointer"
                           aria-label="Pregunta siguiente"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">
@@ -246,7 +245,7 @@ const questions = [
                             <button
                               type="submit"
                               data-submit-button
-                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
+                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white cursor-pointer"
                             >
                               Enviar formulario
                             </button>
@@ -260,7 +259,7 @@ const questions = [
                           {question.options?.map((option) => (
                             <button
                               type="button"
-                              class="tf-choice rounded-2xl border border-white/14 bg-white/6 px-5 py-3 text-left text-sm font-medium text-white transition duration-300 hover:border-imc-yellow/60 hover:bg-imc-yellow/10 hover:text-imc-yellow"
+                              class="tf-choice rounded-2xl border border-white/14 bg-white/6 px-5 py-3 text-left text-sm font-medium text-white transition duration-300 hover:border-imc-yellow/60 hover:bg-imc-yellow/10 hover:text-imc-yellow cursor-pointer"
                               data-choice-button
                               data-choice-name={question.key}
                               data-choice-value={option}
@@ -275,7 +274,7 @@ const questions = [
                             <button
                               type="submit"
                               data-submit-button
-                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
+                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white cursor-pointer"
                             >
                               Enviar formulario
                             </button>
@@ -296,7 +295,7 @@ const questions = [
                             <button
                               type="submit"
                               data-submit-button
-                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
+                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white cursor-pointer"
                             >
                               Enviar formulario
                             </button>
@@ -305,7 +304,7 @@ const questions = [
                           <button
                             type="button"
                             data-continue-button
-                            class="mt-8 rounded-full border border-white/16 px-7 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-white transition hover:border-imc-yellow hover:bg-imc-yellow hover:text-imc-black"
+                            class="mt-8 rounded-full border border-white/16 px-7 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-white transition hover:border-imc-yellow hover:bg-imc-yellow hover:text-imc-black cursor-pointer"
                           >
                             Continuar
                           </button>
@@ -329,7 +328,7 @@ const questions = [
                             <button
                               type="submit"
                               data-submit-button
-                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white"
+                              class="rounded-full border border-imc-yellow bg-imc-yellow px-8 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-imc-black transition hover:border-white hover:bg-white cursor-pointer"
                             >
                               Enviar formulario
                             </button>
@@ -338,7 +337,7 @@ const questions = [
                           <button
                             type="button"
                             data-continue-button
-                            class="mt-8 rounded-full border border-white/16 px-7 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-white transition hover:border-imc-yellow hover:bg-imc-yellow hover:text-imc-black"
+                            class="mt-8 rounded-full border border-white/16 px-7 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-white transition hover:border-imc-yellow hover:bg-imc-yellow hover:text-imc-black cursor-pointer"
                           >
                             Continuar
                           </button>
