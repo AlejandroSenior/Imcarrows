@@ -29,6 +29,36 @@ const questions = [
     autocomplete: 'off'
   },
   {
+    key: 'carYear',
+    label: '¿De qué año buscas el vehículo?',
+    prompt: 'Indica el año de matriculación que tienes en mente.',
+    type: 'text',
+    placeholder: 'Ej: 2019',
+    autocomplete: 'off'
+  },
+  {
+    key: 'fuelType',
+    label: '¿Qué tipo de combustible prefieres?',
+    prompt: 'Nos ayuda a filtrar los vehículos según tu preferencia de motorización.',
+    type: 'choice',
+    options: ['Gasolina', 'Diésel', 'Híbrido', 'Eléctrico', 'Sin preferencia']
+  },
+  {
+    key: 'transmission',
+    label: '¿Qué tipo de transmisión prefieres?',
+    prompt: 'Selecciona la caja de cambios que mejor se adapte a tu estilo de conducción.',
+    type: 'choice',
+    options: ['Automático', 'Manual', 'Sin preferencia']
+  },
+  {
+    key: 'maxKilometers',
+    label: '¿Cuál es el kilometraje máximo que aceptas?',
+    prompt: 'Indica el límite de kilómetros que estás dispuesto a considerar.',
+    type: 'text',
+    placeholder: 'Ej: 80.000 km',
+    autocomplete: 'off'
+  },
+  {
     key: 'priceRange',
     label: '¿Qué rango de precios estás considerando?',
     prompt: 'Incluye la cifra aproximada, para ajustar la búsqueda a tu presupuesto.',
@@ -651,6 +681,10 @@ const questions = [
       const answers = [
         ['Uso del vehículo', formData.get('carPurpose')],
         ['Marca y modelo', formData.get('carModel')],
+        ['Año del vehículo', formData.get('carYear')],
+        ['Combustible', formData.get('fuelType')],
+        ['Transmisión', formData.get('transmission')],
+        ['Kilometraje máximo', formData.get('maxKilometers')],
         ['Rango de precios', formData.get('priceRange')],
         ['Plazo de entrega', formData.get('deliveryTime')],
         ['Ciudad', formData.get('city')],
