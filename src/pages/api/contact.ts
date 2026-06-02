@@ -17,6 +17,10 @@ export const POST: APIRoute = async ({ request }) => {
     const priceRange = String(formData.get('priceRange') ?? formData.get('budget') ?? '');
     const deliveryTime = String(formData.get('deliveryTime') ?? formData.get('timeframe') ?? '');
     const carModel = String(formData.get('carModel') ?? '');
+    const carYear = String(formData.get('carYear') ?? '');
+    const fuelType = String(formData.get('fuelType') ?? '');
+    const transmission = String(formData.get('transmission') ?? '');
+    const maxKilometers = String(formData.get('maxKilometers') ?? '');
     const deliveryLocation = String(formData.get('city') ?? formData.get('deliveryLocation') ?? '');
     const extraDetails = String(formData.get('extraDetails') ?? '');
 
@@ -92,6 +96,26 @@ export const POST: APIRoute = async ({ request }) => {
                 <div class="question-row">
                     <div class="question-label"><strong><u>Marca y modelo</u></strong></div>
                     <div class="question-answer">${escapeHtml(carModel || '—')}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>Año del vehículo</u></strong></div>
+                    <div class="question-answer">${escapeHtml(carYear || '—')}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>Combustible</u></strong></div>
+                    <div class="question-answer">${escapeHtml(fuelType || '—')}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>Transmisión</u></strong></div>
+                    <div class="question-answer">${escapeHtml(transmission || '—')}</div>
+                </div>
+
+                <div class="question-row">
+                    <div class="question-label"><strong><u>Kilometraje máximo</u></strong></div>
+                    <div class="question-answer">${escapeHtml(maxKilometers || '—')}</div>
                 </div>
 
                 <div class="question-row">
